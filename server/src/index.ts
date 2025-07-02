@@ -1,10 +1,20 @@
 import express from 'express';
+import path from 'path';
 
 const app = express();
-const PORT = process.env.POST || 5000;
+const PORT = process.env.PORT || 5000;
 
-app.get('/api/hello', (req, res) => {
-  res.send('Hello from Express!');
+// Serve static files from Vite's build output
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+// Example API route
+app.get('/api/hello', (_req, res) => {
+  res.json({ message: 'Hello from backend!' });
+});
+
+// Catch-all to serve frontend
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 });
 
 app.listen(PORT, () => {
