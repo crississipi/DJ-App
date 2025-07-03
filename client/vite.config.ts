@@ -9,7 +9,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'https://dj-app-4uc9.onrender.com'
+      '/api': 'http://localhost:5000'
     }
   }
 })

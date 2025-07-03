@@ -1,24 +1,28 @@
 import express from 'express';
 import path from 'path';
+import apiRoutes from './routes/api';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Serve frontend build
-app.use(express.static(path.join(__dirname, '../../client/dist')));
+const clientDist = path.join(__dirname, '../../client/dist');
 
-// Example API route
-app.get('/api/hello', (_req, res) => {
-  res.json({ message: 'Hello from backend!' });
-});
+// Serve static frontend
+app.use(express.static(clientDist));
 
-// Prevent invalid /api/* requests from hitting the catch-all
+// API routes
+app.use('/api', apiRoutes);
+
+// Handle invalid /api routes
 app.use('/api', (_req, res) => {
   res.status(404).json({ message: 'API route not found' });
 });
 
-// Catch-all for React Router (frontend)
+// Catch-all for React Router frontend
 app.get('*', (_req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+  res.sendFile(path.join(clientDist, 'index.html'));
 });
 
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
