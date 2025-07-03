@@ -12,11 +12,13 @@ app.get('/api/hello', (_req, res) => {
   res.json({ message: 'Hello from backend!' });
 });
 
-// Catch-all for React Router
+// Prevent invalid /api/* requests from hitting the catch-all
+app.use('/api', (_req, res) => {
+  res.status(404).json({ message: 'API route not found' });
+});
+
+// Catch-all for React Router (frontend)
 app.get('*', (_req, res) => {
   res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
